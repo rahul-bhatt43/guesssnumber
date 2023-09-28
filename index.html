@@ -163,6 +163,7 @@
                     results.innerHTML = "Please enter some input value"
                 } else if (+userInput.value > 100 || +userInput.value < 0) {
                     if (+userInput.value === 1729) {
+                        userInput.value = "";
                         results.innerHTML = `${randomNum}`;
                     } else {
                         results.innerHTML = "Value is not in range"
