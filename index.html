@@ -144,7 +144,7 @@
             randomNum = Math.floor(Math.random() * 100 + 1);
         }
         generateRand();
-        console.log(randomNum);
+        
 
         function restart() {
             userInput.removeAttribute("disabled");
@@ -180,6 +180,7 @@
                     if (+userInput.value === randomNum) {
                         results.innerHTML = `That's a right guess, it's ${randomNum}`
                         userInput.value = "";
+                        userInput.setAttribute("disabled", "");
 
 
                         startOver.innerHTML = `<button onclick="restart()">Start Over</button>`;
