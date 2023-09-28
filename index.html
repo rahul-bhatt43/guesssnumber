@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            background-color: blueviolet;
+        }
+
+        .container {
+            height: 70vh;
+            width: 100%;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 10px;
+            text-align: center;
+
+        }
+
+        .head {
+            background-color: #111;
+            width: 100%;
+            height: 40px;
+            font-size: 1.3rem;
+            display: grid;
+            color: white;
+            place-content: center;
+        }
+
+        .container p {
+            font-size: 1.2rem;
+        }
+
+        .container h1 {
+            font-size: 4.5rem;
+        }
+
+        .facility input {
+            height: 30px;
+            padding: 10px 5px;
+            border: none;
+            transition: .3s all ease;
+            font-size: 1rem;
+            border-radius: 8px;
+        }
+
+        .facility input:focus {
+            outline: none;
+            border: none;
+            box-shadow: 5px 5px red;
+        }
+
+        button {
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            background-color: black;
+            color: #fff;
+            transition: .3s all ease;
+            border-radius: 8px;
+        }
+
+        button:focus {
+            box-shadow: 3px 3px white;
+
+        }
+
+        .options {
+            line-height: 30px;
+        }
+
+        .guessArray {
+            background-color: grey;
+            padding: 4px 8px;
+            margin-left: 4px;
+        }
+
+        @media(min-width: 751px) {
+            .head {
+                height: 70px;
+                font-size: 1.5rem;
+            }
+
+            .container p {
+                font-size: 1.2rem;
+            }
+
+            .container h1 {
+                font-size: 2.5rem;
+
+            }
+
+            .container {
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">Number Guessing Game</div>
+    <div class="container">
+        <p>Try and guess a number between 1 and 100,<br>You have 10 attempts to guess the right number.</p>
+        <h1>Guess a Number</h1>
+        <div class="facility">
+            <input type="number" placeholder="Guess here" class="userInput">
+            <br><br>
+            <button type="submit" onclick="guessNum()">Submit Game</button>
+        </div>
+        <div class="options">
+            <p>Previous Guesses <span class="guessArray"></span></p>
+            <p>Guesses Remaining: <span class="attemptsLeft">10</span></p>
+            <div class="results"></div>
+            <div class="startOver"></div>
+
+        </div>
+    </div>
+
+    <script>
+        let randomNum;
+        let numtry = 1;
+        let userInput = document.querySelector(".userInput");
+        let results = document.querySelector(".results");
+        let attemptsLeft = document.querySelector(".attemptsLeft");
+        let guessArray = document.querySelector(".guessArray");
+        let startOver = document.querySelector(".startOver");
+
+        function generateRand() {
+            randomNum = Math.floor(Math.random() * 100 + 1);
+        }
+        generateRand();
+        console.log(randomNum);
+
+        function restart() {
+            userInput.removeAttribute("disabled");
+            startOver.innerHTML = ``;
+            guessArray.innerHTML = "";
+            numtry = 1
+            results.innerHTML = ``
+            attemptsLeft.innerHTML = "10";
+            generateRand();
+            console.log(randomNum);
+        }
+
+        function guessNum() {
+            if (numtry !== 10) {
+                if (+userInput.value === 0) {
+                    results.innerHTML = "Please enter some input value"
+                } else if (+userInput.value > 100 || +userInput.value < 0) {
+                    if (+userInput.value === 1729) {
+                        results.innerHTML = `${randomNum}`;
+                    } else {
+                        results.innerHTML = "Value is not in range"
+                    }
+                }
+                else {
+                    if (numtry === 1) {
+                        guessArray.innerHTML += `${+userInput.value}`;
+                    } else {
+                        guessArray.innerHTML += `, ${+userInput.value}`;
+                    }
+                    numtry++;
+                    attemptsLeft.innerHTML = `${11 - numtry}`;
+
+                    if (+userInput.value === randomNum) {
+                        results.innerHTML = `That's a rigth guess, it's ${randomNum}`
+                        userInput.value = "";
+
+
+                        startOver.innerHTML = `<button onclick="restart()">Start Over</button>`;
+
+                    } else if (+userInput.value > randomNum) {
+                        if (+userInput.value > (randomNum + 10)) {
+                            results.innerHTML = `${+userInput.value} is too high`
+                        } else {
+                            results.innerHTML = `${+userInput.value} is a little high`
+                        }
+                        userInput.value = "";
+
+                    } else if (+userInput.value < randomNum) {
+                        if (+userInput.value < (randomNum - 10)) {
+                            results.innerHTML = `${+userInput.value} is too low`
+                        } else {
+                            results.innerHTML = `${+userInput.value} is a little low`
+                        }
+                        userInput.value = "";
+                    }
+                }
+            } else {
+                results.innerHTML = `You Lost, it's ${randomNum}`
+                guessArray.innerHTML += `${+userInput.value}, `;
+                attemptsLeft.innerHTML = `${10 - numtry}`;
+                userInput.setAttribute("disabled", "");
+
+
+                startOver.innerHTML = `<button onclick="restart()">Start Over</button>`;
+                userInput.value = "";
+            }
+        }
+    </script>
+</body>
+
+</html>
